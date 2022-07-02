@@ -1,0 +1,2 @@
+# NotherBot
+Discord bot
