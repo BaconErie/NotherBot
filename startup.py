@@ -13,3 +13,5 @@ cursor.execute('CREATE TABLE guild_data (guild_id int, key text, value text, typ
 connection.commit()
 
 connection.close()
+
+print('Completed startup stuff. You can now run main.py in the "notherbot" folder.')
