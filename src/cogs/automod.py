@@ -24,18 +24,17 @@ class AutoMod(commands.Cog):
     # EVENT LISTENERS AND SLASH COMMANDS #
     ######################################
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if message.author == self.bot.user:
-            return
+    # @commands.Cog.listener()
+    # async def on_message(self, message):
+    #     if message.author == self.bot.user:
+    #         return
 
-        await self.check_spam_ping(message)
+    #     await self.check_spam_ping(message)
 
     # Muterole command
-    @commands.slash_command(guild_ids=[992932470834069654])
+    @commands.slash_command(guild_ids=[992932470834069654], description='Set the server mute role')
     async def muterole(self, ctx,
         muterole: Option(discord.Role, 'The role to give to a muted person'),
-        description='Set the server mute role'
     ):
         # Get the id of the muterole
         # Set that with the key 'muterole' in the guild storage
@@ -52,18 +51,53 @@ class AutoMod(commands.Cog):
         ctx.respond(embed=embed)
     
     # Mute command
-    @commands.slash_command(guild_ids=[992932470834069654])
-    
-
-
-    # Ping Spam Slash Commands
-    @commands.slash_command(guild_ids=[992932470834069654])
-    async def set(self, ctx,
-        limit: Option(int, 'The max amount of mentions per minute'),
-        mute_duration: Option(int, 'Mute duration, IN MINUTES, if the person is muted for spam pinging'),
-        pingspam = self.bot.create_group()
+    @commands.slash_command(guild_ids=[992932470834069654], name='mute', description='Mutes a member for the specified amount of minutes, or forever if none')
+    async def muteuser(self, ctx,
+        user: Option(discord.User, 'User to mute'),
+        duration: Option(int, 'Time in MINUTES to mute for. Leave blank to mute indefinitely', required=False),
+        reason: Option(str, 'Optional reason to mute for.', required=False),
     ):
-        self.pingspam
+        status = self.mute(ctx.guild.id, user.id, ctx.author.id, duration, reason)
+        
+        if status == 'mute role not set':
+            ctx.respond('You have not set a mute role yet! Set one up with the `/muterole` command!')
+
+        elif status == 'mute role does not exist':
+            ctx.respond('A mute role was set, but does not exist anymore! Please try again with the `/muterole` command!')
+
+        elif status == 'member does not exist':
+            ctx.respond('I cannot find the person to mute. Make sure that they haven\'t left the server already.')
+        
+        elif status == 'moderator does not have perms':
+            ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.')
+
+        elif status == 'duration not an integer':
+            ctx.respond('Make sure that duration is an integer that is above zero, or leave it blank')
+        
+        elif status == 'no perms':
+            ctx.respond('I do not have permission to mute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.')
+        
+        elif status == 'success':
+            if reason == None:
+                if duration == None:
+                    ctx.respond(f'Sucessfully muted {user.mention} indefinitely. No reason is provided.')
+                else:
+                    ctx.respond(f'Sucessfully muted {user.mention} for {duration} minutes. No reason is provided.')
+            else:
+                if duration == None:
+                    ctx.respond(f'Sucessfully muted {user.mention} indefinitely for reason: {reason}.')
+                else:
+                    ctx.respond(f'Sucessfully muted {user.mention} for {duration} minutes. Reason: {reason}.')
+
+    # # Ping Spam Slash Commands
+    # @commands.slash_command(guild_ids=[992932470834069654])
+    # async def set(self, ctx,
+    #     limit: Option(int, 'The max amount of mentions per minute'),
+    #     mute_duration: Option(int, 'Mute duration, IN MINUTES, if the person is muted for spam pinging'),
+    #     pingspam = self.bot.create_group()
+    # ):
+    #     self.pingspam
+    
 
     #####################
     # PROCESS FUNCTIONS #
@@ -149,7 +183,7 @@ class AutoMod(commands.Cog):
         # 2. Check to make sure the mute role exists, if not alert and return
         # 3. Check to make sure the member exists, if not alert and return
         # 4. Check to make sure the moderator has manage role permission, if not alert and return
-        # 5. Make sure duration is an integer, if not alert and return
+        # 5. Make sure duration is an integer and is above zero, if not alert and return
         # 6. Try to add the role to the member, if there is a permission error alert and return
         # 7. If we are able to add the muted role, record it in the guild user storage
 
@@ -180,8 +214,8 @@ class AutoMod(commands.Cog):
             # If no manage roles perm return
             return 'moderator does not have perms'
         
-        # Make sure duration is an integer
-        if type(duration) != int:
+        # Make sure duration is an integer > 0 if not none
+        if duration != None and (type(duration) != int or not duration > 0):
             return 'duration not an integer'
         
         # Try to add the role to the member
