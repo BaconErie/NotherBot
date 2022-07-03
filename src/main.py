@@ -7,7 +7,7 @@ import re
 from discord.commands import Option
 
 intents = discord.Intents.all()
-bot = commands.Bot(intents=intents, owner_ids=727548572542959754)
+bot = commands.Bot(intents=intents, owner_ids=[727548572542959754])
 
 bot.load_extension('cogs.automod')
 
