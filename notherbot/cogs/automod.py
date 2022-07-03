@@ -48,7 +48,7 @@ class AutoMod(commands.Cog):
         embed = Embed(color=0x05ff00)
         embed.add_field(name='Muterole Set', value=f'Successfully set {muterole.mention} as the muterole', inline=False)
         embed.set_footer(text='Make sure that the muterole actually works!')
-        ctx.respond(embed=embed)
+        await ctx.respond(embed=embed)
     
     # Mute command
     @commands.slash_command(guild_ids=[992932470834069654], name='mute', description='Mutes a member for the specified amount of minutes, or forever if none')
@@ -60,34 +60,34 @@ class AutoMod(commands.Cog):
         status = await self.mute(ctx.guild.id, user.id, ctx.author.id, duration, reason)
         
         if status == 'mute role not set':
-            ctx.respond('You have not set a mute role yet! Set one up with the `/muterole` command!')
+            await ctx.respond('You have not set a mute role yet! Set one up with the `/muterole` command!')
 
         elif status == 'mute role does not exist':
-            ctx.respond('A mute role was set, but does not exist anymore! Please try again with the `/muterole` command!')
+            await ctx.respond('A mute role was set, but does not exist anymore! Please try again with the `/muterole` command!')
 
         elif status == 'member does not exist':
-            ctx.respond('I cannot find the person to mute. Make sure that they haven\'t left the server already.')
+            await ctx.respond('I cannot find the person to mute. Make sure that they haven\'t left the server already.')
         
         elif status == 'moderator does not have perms':
-            ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.')
+            await ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.')
 
         elif status == 'duration not an integer':
-            ctx.respond('Make sure that duration is an integer that is above zero, or leave it blank')
+            await ctx.respond('Make sure that duration is an integer that is above zero, or leave it blank')
         
         elif status == 'no perms':
-            ctx.respond('I do not have permission to mute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.')
+            await ctx.respond('I do not have permission to mute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.')
         
         elif status == 'success':
             if reason == None:
                 if duration == None:
-                    ctx.respond(f'Sucessfully muted {user.mention} indefinitely. No reason is provided.')
+                    await ctx.respond(f'Sucessfully muted {user.mention} indefinitely. No reason is provided.')
                 else:
-                    ctx.respond(f'Sucessfully muted {user.mention} for {duration} minutes. No reason is provided.')
+                    await ctx.respond(f'Sucessfully muted {user.mention} for {duration} minutes. No reason is provided.')
             else:
                 if duration == None:
-                    ctx.respond(f'Sucessfully muted {user.mention} indefinitely for reason: {reason}.')
+                    await ctx.respond(f'Sucessfully muted {user.mention} indefinitely for reason: {reason}.')
                 else:
-                    ctx.respond(f'Sucessfully muted {user.mention} for {duration} minutes. Reason: {reason}.')
+                    await ctx.respond(f'Sucessfully muted {user.mention} for {duration} minutes. Reason: {reason}.')
 
     # # Ping Spam Slash Commands
     # @commands.slash_command(guild_ids=[992932470834069654])
