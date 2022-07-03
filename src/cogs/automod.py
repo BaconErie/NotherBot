@@ -229,3 +229,6 @@ class AutoMod(commands.Cog):
 
         # Return with success
         return 'success'
+
+def setup(bot):
+    bot.add_cog(AutoMod(bot))
