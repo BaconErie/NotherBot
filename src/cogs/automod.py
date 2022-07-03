@@ -1,5 +1,5 @@
 # Automoderation tools for ChillBot
-# Copyright 2022 StillChillDevs. See the LICENSE file to see full license
+# Copyright 2022 BaconErie. See the LICENSE file to see full license
 
 from datetime import datetime, timezone
 
@@ -53,7 +53,7 @@ class AutoMod(commands.Cog):
     
     # Mute command
     @commands.slash_command(guild_ids=[992932470834069654])
-
+    
 
 
     # Ping Spam Slash Commands
