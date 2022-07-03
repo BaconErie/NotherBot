@@ -16,7 +16,7 @@ def get_global_user_data(user_id, key):
 
     output = cursor.fetchone()
 
-    if len(output) == 0:
+    if output == None or len(output) == 0:
         # No data exists
         connection.close()
         return None
@@ -69,7 +69,7 @@ def get_guild_user_data(guild_id, user_id, key):
 
     output = cursor.fetchone()
 
-    if len(output) == 0:
+    if output == None or len(output) == 0:
         # No data exists
         connection.close()
         return None
@@ -122,7 +122,7 @@ def get_guild_data(guild_id, key):
 
     output = cursor.fetchone()
 
-    if len(output) == 0:
+    if output == None or len(output) == 0:
         # No data exists
         connection.close()
         return None
