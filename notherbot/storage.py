@@ -46,6 +46,8 @@ def set_global_user_data(user_id, key, value):
     # If the value is a dictionary or list, turn it into a string
     if value_type == 'dict' or value_type == 'list':
         value = dumps(value)
+    
+    value = str(value)
 
     # Delete previous entry
     cursor.execute('DELETE FROM global_user_data WHERE user_id=? AND key=?', (user_id, key))
@@ -96,7 +98,9 @@ def set_guild_user_data(guild_id, user_id, key, value):
 
     # If the value is a dictionary or list, turn it into a string
     if value_type == 'dict' or value_type == 'list':
-        value = dumps(value)
+        value = dumps(value)    
+
+    value = str(value)
 
     # Delete previous entry
     cursor.execute('DELETE FROM guild_user_data WHERE guild_id=? AND user_id=? AND key=?', (guild_id, user_id, key))
@@ -148,6 +152,8 @@ def set_guild_data(guild_id, key, value):
     # If the value is a dictionary or list, turn it into a string
     if value_type == 'dict' or value_type == 'list':
         value = dumps(value)
+
+    value = str(value)
 
     # Delete previous entry
     cursor.execute('DELETE FROM guild_data WHERE guild_id=? AND key=?', (guild_id, key))
