@@ -57,7 +57,7 @@ class AutoMod(commands.Cog):
         duration: Option(int, 'Time in MINUTES to mute for. Leave blank to mute indefinitely', required=False),
         reason: Option(str, 'Optional reason to mute for.', required=False),
     ):
-        status = self.mute(ctx.guild.id, user.id, ctx.author.id, duration, reason)
+        status = await self.mute(ctx.guild.id, user.id, ctx.author.id, duration, reason)
         
         if status == 'mute role not set':
             ctx.respond('You have not set a mute role yet! Set one up with the `/muterole` command!')
