@@ -161,4 +161,6 @@ def set_guild_data(guild_id, key, value):
     # Add new entry
     cursor.execute('INSERT INTO guild_data (guild_id, key, value, type) VALUES (?,?,?,?)', (guild_id, key, value, value_type))
 
+    connection.commit()
+
     connection.close()
