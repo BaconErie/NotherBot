@@ -33,6 +33,7 @@ def get_global_user_data(user_id, key):
     elif value_type == 'dict' or value_type == 'list':
         value = loads(value)
 
+    connection.commit()
     connection.close()
 
     return value
@@ -55,6 +56,7 @@ def set_global_user_data(user_id, key, value):
     # Add new entry
     cursor.execute('INSERT INTO global_user_data (user_id, key, value, type) VALUES (?,?,?,?)', (user_id, key, value, value_type))
 
+    connection.commit()
     connection.close()
 
 ###################
@@ -86,6 +88,7 @@ def get_guild_user_data(guild_id, user_id, key):
     elif value_type == 'dict' or value_type == 'list':
         value = loads(value)
 
+    connection.commit()
     connection.close()
 
     return value
@@ -108,6 +111,7 @@ def set_guild_user_data(guild_id, user_id, key, value):
     # Add new entry
     cursor.execute('INSERT INTO guild_user_data (guild_id, user_id, key, value, type) VALUES (?,?,?,?,?)', (guild_id, user_id, key, value, value_type))
 
+    connection.commit()
     connection.close()
 
 ##############
@@ -139,6 +143,7 @@ def get_guild_data(guild_id, key):
     elif value_type == 'dict' or value_type == 'list':
         value = loads(value)
 
+    connection.commit()
     connection.close()
 
     return value
