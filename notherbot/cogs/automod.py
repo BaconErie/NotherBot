@@ -295,6 +295,5 @@ class AutoMod(commands.Cog):
         # 7. Return success if we reached here
         return 'success'
 
-
 def setup(bot):
     bot.add_cog(AutoMod(bot))
