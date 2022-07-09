@@ -52,7 +52,7 @@ class AutoMod(commands.Cog):
     
     # Mute command
     @commands.slash_command(guild_ids=[992932470834069654], name='mute', description='Mutes a member for the specified amount of minutes, or forever if none')
-    async def muteuser(self, ctx,
+    async def mute_user(self, ctx,
         user: Option(discord.User, 'User to mute'),
         duration: Option(int, 'Time in MINUTES to mute for. Leave blank to mute indefinitely', required=False),
         reason: Option(str, 'Optional reason to mute for.', required=False),
@@ -88,6 +88,14 @@ class AutoMod(commands.Cog):
                     await ctx.respond(f'Sucessfully muted {user.mention} indefinitely for reason: {reason}.')
                 else:
                     await ctx.respond(f'Sucessfully muted {user.mention} for {duration} minutes. Reason: {reason}.')
+
+    # Unmute command
+    @commands.slash_command(guild_ids=[992932470834069654], name='unmute', description='Unmutes a member with an optional reason')
+    async def unmute_user(self, ctx,
+        user: Option(discord.User, 'User to unmute'),
+        reason: Option(str, 'Reason for unmute')
+    ):
+        pass
 
     # # Ping Spam Slash Commands
     # @commands.slash_command(guild_ids=[992932470834069654])
@@ -229,6 +237,64 @@ class AutoMod(commands.Cog):
 
         # Return with success
         return 'success'
+    
+    async def unmute(self, guild_id, member_id, moderator_id, reason):
+        '''Unmutes a member for the given reason'''
+
+        # STEPS
+
+        # CHECKS:
+        # 1. Check if member exists, return 'member does not exist' if no
+        # 2. Get the mute role, return 'muterole not found' if role does not exist
+        # 3. Check if the member has the role, if not return 'member not muted'
+        # 4. Check if the moderator has manage roles permission, if not return 'moderator does not have perms'
+
+        # MAIN STEPS
+        # 5. Try to remove the mute role from the user, return 'no perms' if Forbidden exception
+        # 6. Record in storage that the user is no longer muted
+        # 7. Return success if we reached here
+
+        # 1. Check if the member exists, if not return 'member does not exist'
+        guild = self.bot.get_guild(guild_id)
+        member = guild.get_member(member_id)
+        moderator = guild.get_member(moderator_id)
+
+        if member == None:
+            return 'member does not exist'
+
+        # 2. Get the mute role, return 'muterole not found' if role does not exist
+        muterole_id = storage.get_guild_data(guild_id, 'muterole')
+
+        if muterole_id == None:
+            return 'muterole not found'
+        
+        muterole = guild.get_role(muterole_id)
+        if muterole == None:
+            return 'muterole not found'
+        
+        # 3. Check if the member has the role, if not return 'member not muted'
+        if muterole not in member.roles:
+            return 'member not muted'
+        
+        # 4. Check if the moderator has manage roles permission, if not return 'moderator does not have perms'
+        if not moderator.guild_permissions.manage_roles:
+            return 'moderator does not have perms'
+        
+        # 5. Try to remove the mute role from the user, return 'no perms' if Forbidden exception
+        try:
+            if reason == None:
+                await member.remove_roles(muterole, reason=f'Unmute by moderator {moderator.name}#{moderator.discrimnator}. No reason provided.')
+            else:
+                await member.remove_roles(muterole, reason=f'Unmute by moderator {moderator.name}#{moderator.discrimnator}. Reason: {reason}.')
+        except Forbidden:
+            return 'no perms'
+        
+        # 6. Record in storage that the user is no longer muted
+        storage.set_guild_user_data(guild_id, member_id, 'is_muted', False)
+
+        # 7. Return success if we reached here
+        return 'success'
+
 
 def setup(bot):
     bot.add_cog(AutoMod(bot))
