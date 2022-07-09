@@ -104,7 +104,7 @@ class AutoMod(commands.Cog):
             await ctx.respond('You haven\'t set up a muterole yet, so I don\'t know which role to remove.')
         
         elif status == 'member not muted':
-            await ctx.respond('I couldn\'t find the muterole in the member\'s role list, and so they are probably unmuted')
+            await ctx.respond('I couldn\'t find the muterole in the member\'s role list, and so they are probably unmuted.')
         
         elif status == 'moderator does not have perms':
             await ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.')
