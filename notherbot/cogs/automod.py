@@ -305,9 +305,9 @@ class AutoMod(commands.Cog):
         # 5. Try to remove the mute role from the user, return 'no perms' if Forbidden exception
         try:
             if reason == None:
-                await member.remove_roles(muterole, reason=f'Unmute by moderator {moderator.name}#{moderator.discrimnator}. No reason provided.')
+                await member.remove_roles(muterole, reason=f'Unmute by moderator {moderator.name}#{moderator.discriminator}. No reason provided.')
             else:
-                await member.remove_roles(muterole, reason=f'Unmute by moderator {moderator.name}#{moderator.discrimnator}. Reason: {reason}.')
+                await member.remove_roles(muterole, reason=f'Unmute by moderator {moderator.name}#{moderator.discriminator}. Reason: {reason}.')
         except Forbidden:
             return 'no perms'
         
