@@ -95,7 +95,29 @@ class AutoMod(commands.Cog):
         user: Option(discord.User, 'User to unmute'),
         reason: Option(str, 'Reason for unmute')
     ):
-        pass
+        status = await self.unmute(ctx.guild.id, user.id, ctx.author.id, reason)
+
+        if status == 'member does not exist':
+            await ctx.respond('I cannot find the person to unmute. Make sure that they haven\'t left the server already.')
+        
+        elif status == 'muterole not found':
+            await ctx.respond('You haven\'t set up a muterole yet, so I don\'t know which role to remove.')
+        
+        elif status == 'member not muted':
+            await ctx.respond('I couldn\'t find the muterole in the member\'s role list, and so they are probably unmuted')
+        
+        elif status == 'moderator does not have perms':
+            await ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.')
+        
+        elif status == 'no perms':
+            await ctx.respond('I do not have permission to unmute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.')
+        
+        elif status == 'success':
+            if reason == None:
+                await ctx.respond(f'Sucessfully unmuted {user.mention}. No reason was provided')
+            else:
+                await ctx.respond(f'Sucessfully unmuted {user.mention}. Reason: {reason}')
+
 
     # # Ping Spam Slash Commands
     # @commands.slash_command(guild_ids=[992932470834069654])
