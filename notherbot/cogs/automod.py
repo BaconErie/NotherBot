@@ -93,7 +93,7 @@ class AutoMod(commands.Cog):
     @commands.slash_command(guild_ids=[992932470834069654], name='unmute', description='Unmutes a member with an optional reason')
     async def unmute_user(self, ctx,
         user: Option(discord.User, 'User to unmute'),
-        reason: Option(str, 'Reason for unmute')
+        reason: Option(str, 'Reason for unmute', required=False)
     ):
         status = await self.unmute(ctx.guild.id, user.id, ctx.author.id, reason)
 
