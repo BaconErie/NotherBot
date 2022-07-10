@@ -11,7 +11,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import storage
-
+from datetime import datetime, timezone
 
 class AutoMod(commands.Cog):
     def __init__(self, bot):
@@ -27,7 +27,8 @@ class AutoMod(commands.Cog):
     @tasks.loop(minutes=1.0)
     async def mute_loop(self):
         # STEPS
-        # 1. Loop through all
+        # 1. Loop through all muted member_ids in muted_member_ids
+        # 2. 
     
         pass
     
@@ -266,11 +267,17 @@ class AutoMod(commands.Cog):
             return 'no perms'
         
         # Record that the user is muted in the storage
-        mute_list = storage.get_guild_data(guild_id, 'muted_user_ids')
-        if mute_list == None:
-            storage.set_guild_data(guild_id, 'muted_user_ids', [member_id])
+        if duration == None:
+            mute_end_time = -1
         else:
-            mute_list.append(member_id)
+            mute_end_time = datetime.now(timezone.utc).timestamp() + duration * 60
+        
+        mute_list = storage.get_guild_data(guild_id, 'muted_user_ids')
+
+        if mute_list == None:
+            storage.set_guild_data(guild_id, 'muted_user_ids', [[member_id, mute_end_time]])
+        else:
+            mute_list.append([member_id, mute_end_time])
             storage.set_guild_data(guild_id, 'muted_user_ids', mute_list)
 
         # Return with success
@@ -330,9 +337,10 @@ class AutoMod(commands.Cog):
         # 6. Record in storage that the user is no longer muted
         mute_list = storage.get_guild_data(guild_id, 'muted_user_ids')
 
-        if member_id in mute_list:
-            mute_list.remove(member_id)
-            storage.set_guild_data(guild_id, 'muted_user_ids', mute_list)
+        for entry in mute_list:
+            if entry[0] == member_id:
+                mute_list.remove(entry)
+                storage.set_guild_data(guild_id, 'muted_user_ids', mute_list)
 
         # 7. Return success if we reached here
         return 'success'
