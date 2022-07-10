@@ -27,7 +27,7 @@ class AutoMod(commands.Cog):
     # LOOP THING #
     ##############
 
-    @tasks.loop(minutes=1.0)
+    @tasks.loop(seconds=2.0)
     async def unmute_loop(self):
         # STEPS
         # 1. Loop through all muted member_ids in muted_member_ids
@@ -40,7 +40,7 @@ class AutoMod(commands.Cog):
             for entry in mutelist:
                 if entry[1] < current_time:
                     # Muted end time has passed, unmute
-                    self.unmute(guild.id, mutelist[0], self.bot.user.id, 'Automatic unmute')
+                    await self.unmute(guild.id, mutelist[0], self.bot.user.id, 'Automatic unmute')
         
     
     ######################################
