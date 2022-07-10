@@ -27,7 +27,7 @@ class AutoMod(commands.Cog):
     # LOOP THING #
     ##############
 
-    @tasks.loop(seconds=2.0)
+    @tasks.loop(minutes=1.0)
     async def unmute_loop(self):
         # STEPS
         # 1. Loop through all muted member_ids in muted_member_ids
