@@ -19,6 +19,17 @@ class AutoMod(commands.Cog):
 
         # Create command groups
         self.pingspam = self.bot.create_group('pingspam', 'Automod for ping spam')
+
+    ##############
+    # LOOP THING #
+    ##############
+
+    @tasks.loop(minutes=1.0)
+    async def mute_loop(self):
+        # STEPS
+        # 1. Loop through all
+    
+        pass
     
     ######################################
     # EVENT LISTENERS AND SLASH COMMANDS #
@@ -255,7 +266,12 @@ class AutoMod(commands.Cog):
             return 'no perms'
         
         # Record that the user is muted in the storage
-        storage.set_guild_user_data(guild_id, member_id, 'is_muted', True)
+        mute_list = storage.get_guild_data(guild_id, 'muted_user_ids')
+        if mute_list == None:
+            storage.set_guild_data(guild_id, 'muted_user_ids', [member_id])
+        else:
+            mute_list.append(member_id)
+            storage.set_guild_data(guild_id, 'muted_user_ids', mute_list)
 
         # Return with success
         return 'success'
@@ -312,7 +328,11 @@ class AutoMod(commands.Cog):
             return 'no perms'
         
         # 6. Record in storage that the user is no longer muted
-        storage.set_guild_user_data(guild_id, member_id, 'is_muted', False)
+        mute_list = storage.get_guild_data(guild_id, 'muted_user_ids')
+
+        if member_id in mute_list:
+            mute_list.remove(member_id)
+            storage.set_guild_data(guild_id, 'muted_user_ids', mute_list)
 
         # 7. Return success if we reached here
         return 'success'
