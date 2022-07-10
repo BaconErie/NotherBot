@@ -41,7 +41,7 @@ class AutoMod(commands.Cog):
                 if entry[1] < current_time and entry[1] != -1:
                     # If it's equal to -1, then its an indefinite mute
                     # Muted end time has passed, unmute
-                    await self.unmute(guild.id, entry[0], self.bot.user.id, 'Automatic unmute')
+                    await self.unmute(guild.id, entry[0], self.bot.user.id, f'Automatic unmute after {int(int(current_time - entry[1])/60)} minutes')
         
     
     ######################################
@@ -274,7 +274,16 @@ class AutoMod(commands.Cog):
         
         # Try to add the role to the member
         try:
-            await member.add_roles(muterole)
+            if duration == None:
+                if reason == None:
+                    await member.add_roles(muterole, reason=f'Mute by moderator {moderator.name}#{moderator.discriminator} indefinitely. No reason provided.')
+                else:
+                    await member.add_roles(muterole, reason=f'Mute by moderator {moderator.name}#{moderator.discriminator} indefinitely. Reason: {reason}')
+            else:
+                if reason == None:
+                    await member.add_roles(muterole, reason=f'Mute by moderator {moderator.name}#{moderator.discriminator} for {duration} minutes. No reason provided.')
+                else:
+                    await member.add_roles(muterole, reason=f'Mute by moderator {moderator.name}#{moderator.discriminator} for {duration} minutes. Reason: {reason}')
         except Forbidden:
             return 'no perms'
         
