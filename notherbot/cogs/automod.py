@@ -40,7 +40,7 @@ class AutoMod(commands.Cog):
             for entry in mutelist:
                 if entry[1] < current_time:
                     # Muted end time has passed, unmute
-                    await self.unmute(guild.id, mutelist[0], self.bot.user.id, 'Automatic unmute')
+                    await self.unmute(guild.id, entry[0], self.bot.user.id, 'Automatic unmute')
         
     
     ######################################
