@@ -25,11 +25,11 @@ class AutoMod(commands.Cog):
     ##############
 
     @tasks.loop(minutes=1.0)
-    async def mute_loop(self):
+    async def unmute_loop(self):
         # STEPS
         # 1. Loop through all muted member_ids in muted_member_ids
         # 2. Check if the mute_end_time has passed. If so, unmute the user
-
+        
         for guild in self.bot.guilds:
             mutelist = storage.get_guild_data(guild.id,'muted_member_ids')
             current_time = datetime.now(timezone.utc).timestamp()
