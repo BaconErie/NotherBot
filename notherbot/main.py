@@ -11,4 +11,8 @@ bot = commands.Bot(intents=intents, owner_ids=[727548572542959754])
 
 bot.load_extension('cogs.automod')
 
+@bot.event
+async def on_ready():
+    print('NotherBot connected and ready.')
+
 bot.run()
