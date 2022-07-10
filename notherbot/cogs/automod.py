@@ -60,22 +60,22 @@ class AutoMod(commands.Cog):
         status = await self.mute(ctx.guild.id, user.id, ctx.author.id, duration, reason)
         
         if status == 'mute role not set':
-            await ctx.respond('You have not set a mute role yet! Set one up with the `/muterole` command!')
+            await ctx.respond('You have not set a mute role yet! Set one up with the `/muterole` command!', ephemeral=True)
 
         elif status == 'mute role does not exist':
-            await ctx.respond('A mute role was set, but does not exist anymore! Please try again with the `/muterole` command!')
+            await ctx.respond('A mute role was set, but does not exist anymore! Please try again with the `/muterole` command!', ephemeral=True)
 
         elif status == 'member does not exist':
-            await ctx.respond('I cannot find the person to mute. Make sure that they haven\'t left the server already.')
+            await ctx.respond('I cannot find the person to mute. Make sure that they haven\'t left the server already.', ephemeral=True)
         
         elif status == 'moderator does not have perms':
-            await ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.')
+            await ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.', ephemeral=True)
 
         elif status == 'duration not an integer':
-            await ctx.respond('Make sure that duration is an integer that is above zero, or leave it blank')
+            await ctx.respond('Make sure that duration is an integer that is above zero, or leave it blank', ephemeral=True)
         
         elif status == 'no perms':
-            await ctx.respond('I do not have permission to mute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.')
+            await ctx.respond('I do not have permission to mute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.', ephemeral=True)
         
         elif status == 'success':
             if reason == None:
@@ -93,24 +93,24 @@ class AutoMod(commands.Cog):
     @commands.slash_command(guild_ids=[992932470834069654], name='unmute', description='Unmutes a member with an optional reason')
     async def unmute_user(self, ctx,
         user: Option(discord.User, 'User to unmute'),
-        reason: Option(str, 'Reason for unmute', required=False)
+        reason: Option(str, 'Reason for unmute', required=False),
     ):
         status = await self.unmute(ctx.guild.id, user.id, ctx.author.id, reason)
 
         if status == 'member does not exist':
-            await ctx.respond('I cannot find the person to unmute. Make sure that they haven\'t left the server already.')
+            await ctx.respond('I cannot find the person to unmute. Make sure that they haven\'t left the server already.', ephemeral=True)
         
         elif status == 'muterole not found':
-            await ctx.respond('You haven\'t set up a muterole yet, so I don\'t know which role to remove.')
+            await ctx.respond('You haven\'t set up a muterole yet, so I don\'t know which role to remove.', ephemeral=True)
         
         elif status == 'member not muted':
-            await ctx.respond('I couldn\'t find the muterole in the member\'s role list, and so they are probably unmuted.')
+            await ctx.respond('I couldn\'t find the muterole in the member\'s role list, and so they are probably unmuted.', ephemeral=True)
         
         elif status == 'moderator does not have perms':
-            await ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.')
+            await ctx.respond('You do not have permission to run this command. Make sure that you have the permission to manage roles.', ephemeral=True)
         
         elif status == 'no perms':
-            await ctx.respond('I do not have permission to unmute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.')
+            await ctx.respond('I do not have permission to unmute the user! Make sure that my role is above the user\'s role, and that I have the "Manage Roles" permission.', ephemeral=True)
         
         elif status == 'success':
             if reason == None:
