@@ -38,7 +38,8 @@ class AutoMod(commands.Cog):
             current_time = datetime.now(timezone.utc).timestamp()
 
             for entry in mutelist:
-                if entry[1] < current_time:
+                if entry[1] < current_time and entry[1] != -1:
+                    # If it's equal to -1, then its an indefinite mute
                     # Muted end time has passed, unmute
                     await self.unmute(guild.id, entry[0], self.bot.user.id, 'Automatic unmute')
         
