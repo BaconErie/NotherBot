@@ -41,7 +41,12 @@ class AutoMod(commands.Cog):
                 if entry[1] < current_time and entry[1] != -1:
                     # If it's equal to -1, then its an indefinite mute
                     # Muted end time has passed, unmute
-                    await self.unmute(guild.id, entry[0], self.bot.user.id, f'Automatic unmute after {int(int(current_time - entry[1])/60)} minutes')
+
+                    minutes_muted = int(int(current_time - entry[1])/60)
+
+                    if minutes_muted == 0:
+                        minutes_muted = 1
+                    await self.unmute(guild.id, entry[0], self.bot.user.id, f'Automatic unmute after {minutes_muted} minutes')
         
     
     ######################################
