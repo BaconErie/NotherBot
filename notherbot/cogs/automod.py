@@ -36,8 +36,9 @@ class AutoMod(commands.Cog):
         for guild in self.bot.guilds:
             mutelist = storage.get_guild_data(guild.id,'muted_member_ids')
             current_time = datetime.now(timezone.utc).timestamp()
+
             for entry in mutelist:
-                if mutelist[1] < current_time:
+                if entry[1] < current_time:
                     # Muted end time has passed, unmute
                     self.unmute(guild.id, mutelist[0], self.bot.id, 'Automatic unmute')
         
