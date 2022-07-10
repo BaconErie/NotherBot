@@ -282,13 +282,13 @@ class AutoMod(commands.Cog):
         else:
             mute_end_time = datetime.now(timezone.utc).timestamp() + duration * 60
         
-        mute_list = storage.get_guild_data(guild_id, 'muted_user_ids')
+        mute_list = storage.get_guild_data(guild_id, 'muted_member_ids')
 
         if mute_list == None:
-            storage.set_guild_data(guild_id, 'muted_user_ids', [[member_id, mute_end_time]])
+            storage.set_guild_data(guild_id, 'muted_member_ids', [[member_id, mute_end_time]])
         else:
             mute_list.append([member_id, mute_end_time])
-            storage.set_guild_data(guild_id, 'muted_user_ids', mute_list)
+            storage.set_guild_data(guild_id, 'muted_member_ids', mute_list)
 
         # Return with success
         return 'success'
@@ -345,12 +345,12 @@ class AutoMod(commands.Cog):
             return 'no perms'
         
         # 6. Record in storage that the user is no longer muted
-        mute_list = storage.get_guild_data(guild_id, 'muted_user_ids')
+        mute_list = storage.get_guild_data(guild_id, 'muted_member_ids')
 
         for entry in mute_list:
             if entry[0] == member_id:
                 mute_list.remove(entry)
-                storage.set_guild_data(guild_id, 'muted_user_ids', mute_list)
+                storage.set_guild_data(guild_id, 'muted_member_ids', mute_list)
 
         # 7. Return success if we reached here
         return 'success'
