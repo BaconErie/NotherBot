@@ -20,6 +20,9 @@ class AutoMod(commands.Cog):
         # Create command groups
         self.pingspam = self.bot.create_group('pingspam', 'Automod for ping spam')
 
+        # Start the unmute loop
+        self.unmute_loop.start()
+
     ##############
     # LOOP THING #
     ##############
@@ -29,7 +32,7 @@ class AutoMod(commands.Cog):
         # STEPS
         # 1. Loop through all muted member_ids in muted_member_ids
         # 2. Check if the mute_end_time has passed. If so, unmute the user
-        
+
         for guild in self.bot.guilds:
             mutelist = storage.get_guild_data(guild.id,'muted_member_ids')
             current_time = datetime.now(timezone.utc).timestamp()
