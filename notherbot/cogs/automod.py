@@ -147,7 +147,13 @@ class AutoMod(commands.Cog):
             else:
                 await ctx.respond(f'Sucessfully unmuted {user.mention}. Reason: {reason}')
 
-
+    @commands.slash_command(guild_ids=[992932470834069654], name='alertchannel', description='Sets the alert channel. THIS SHOULD BE SOMETHING LIKE A MOD CHAT!')
+    async def alertchannel(self, ctx,
+        alertchannel: Option(discord.TextChannel, 'Channel to log alerts. Leave blank to disable alert logging.')
+    ):
+        '''The alert channel is where urgent messages will be sent, for example reports or when a possible raider joins'''
+        pass
+    
     # # Ping Spam Slash Commands
     # @commands.slash_command(guild_ids=[992932470834069654])
     # async def set(self, ctx,
