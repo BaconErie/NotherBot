@@ -396,7 +396,7 @@ class AutoMod(commands.Cog):
     # HELPER FUNCTIONS #
     ####################
 
-    def can_alert(self, guild_id):
+    def can_alert(self, guild):
         '''Checks if the alert channel in that guild exists, and makes sure the bot can chat in that channel'''
         pass
 
