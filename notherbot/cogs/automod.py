@@ -152,7 +152,22 @@ class AutoMod(commands.Cog):
         alertchannel: Option(discord.TextChannel, 'Channel to log alerts. Leave blank to disable alert logging.')
     ):
         '''The alert channel is where urgent messages will be sent, for example reports or when a possible raider joins'''
-        pass
+        
+        # STEPS:
+        # 1. Check if the moderator has administrator permission, if not alert and return.
+        # 2. Check if the alertchannel is none. If so 
+        # 2. Check if the channel exists, if not alert and return.
+        # 3. Check if the bot has send messages and embed permission in the GuildChannel. If not alert and return
+        # 4. Get the alert channel id and store it
+        # 5. Alert success
+
+        # 1. Check if the moderator has administrator permission
+        if not ctx.author.guild_permissions.administrator:
+            ctx.respond('You must have administrator permission in order to set the alert channel!', ephemeral=True)
+            return
+        
+        # 2. Check if the channel exists, if not alert and return
+        alertchannel = ctx.guild.get_channel(alertchannel)
     
     # # Ping Spam Slash Commands
     # @commands.slash_command(guild_ids=[992932470834069654])
@@ -376,6 +391,14 @@ class AutoMod(commands.Cog):
 
         # 7. Return success if we reached here
         return 'success'
+
+    ####################
+    # HELPER FUNCTIONS #
+    ####################
+
+    def can_alert(self, guild_id):
+        '''Checks if the alert channel in that guild exists, and makes sure the bot can chat in that channel'''
+        pass
 
 def setup(bot):
     bot.add_cog(AutoMod(bot))
