@@ -398,7 +398,31 @@ class AutoMod(commands.Cog):
 
     def can_alert(self, guild):
         '''Checks if the alert channel in that guild exists, and makes sure the bot can chat in that channel'''
-        pass
+        
+        # STEPS
+        # 1. Check if the alert channel is set or is not 0, if not return False
+        # 2. Check that the alert channel still exists, if not return False
+        # 3. Check if the bot has permission to talk in the channel, if not return False
+        # 4. If we reached here return True
+
+        # 1. Check if the alert channel is set or is not 0, if not return False
+        alertchannel_id = storage.get_guild_data(guild.id, 'alertchannel_id')
+
+        if alertchannel_id == None or alertchannel_id == 0:
+            return False
+        
+        # 2. Check that the alert channel still exists, if not return False
+        alertchannel = guild.get_channel(alertchannel_id)
+
+        if alertchannel == None:
+            return False
+
+        # 3. Check if the bot has permission to talk in the channel, if not return False
+        if not alertchannel.permissions_for(self.bot.user).send_messages:
+            return False
+        
+        # 4. If we reached here return True
+        return True
 
 def setup(bot):
     bot.add_cog(AutoMod(bot))
